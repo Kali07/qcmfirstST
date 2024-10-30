@@ -6,7 +6,7 @@ from questions import questions
 
 initialize_db()
 
-# Initialisation de la session et tirage des questions aléatoires
+
 if "user_email" not in st.session_state:
     st.title("Inscription")
     email = st.text_input("Email", "")
@@ -19,10 +19,10 @@ if "user_email" not in st.session_state:
                 st.session_state["user_name"] = name
                 st.session_state["score"] = 0
                 st.session_state["question_index"] = 0
-                st.session_state["answers"] = [None] * 20  # Initialise les réponses pour 20 questions
+                st.session_state["answers"] = [None] * 20  
                 st.session_state["quiz_completed"] = False
-                # Tirer 20 questions aléatoires parmi toutes les questions disponibles
                 st.session_state["selected_questions"] = random.sample(questions, 20)
+                st.session_state["feedback"] = [None] * 20  
                 st.experimental_rerun()
             else:
                 st.session_state["new_user"] = True
@@ -40,10 +40,10 @@ elif st.session_state.get("new_user", False):
             save_new_player(st.session_state["user_email"], name)
             st.session_state["score"] = 0
             st.session_state["question_index"] = 0
-            st.session_state["answers"] = [None] * 20  # Initialise les réponses pour 20 questions
+            st.session_state["answers"] = [None] * 20
             st.session_state["quiz_completed"] = False
-            # Tirer 20 questions aléatoires parmi toutes les questions disponibles
             st.session_state["selected_questions"] = random.sample(questions, 20)
+            st.session_state["feedback"] = [None] * 20
             st.session_state["new_user"] = False
             st.experimental_rerun()
         else:
@@ -68,27 +68,42 @@ elif st.session_state.get("quiz_completed", False):
 else:
     st.title("QCM sur la Bible")
     current_index = st.session_state["question_index"]
-    questions_to_display = st.session_state["selected_questions"][current_index:current_index+2]
+    question_data = st.session_state["selected_questions"][current_index]
+    
 
-    for i, question_data in enumerate(questions_to_display):
-        st.write(f"**Question {current_index + i + 1}** : {question_data['question']}")
-        answer = st.radio("", question_data["options"], index=None, key=f"question_{current_index + i}")
-        st.session_state["answers"][current_index + i] = answer
+    answer_selected = st.session_state["answers"][current_index] is not None
 
-    progress = (current_index + len(questions_to_display)) / 20
-    st.progress(progress)
 
-    if current_index + 2 < 20:
+    st.write(f"**Question {current_index + 1}** : {question_data['question']}")
+    answer = st.radio(
+        "", 
+        question_data["options"], 
+        index=None, 
+        key=f"question_{current_index}",
+        disabled=answer_selected  
+    )
+
+    if not answer_selected and answer:
+        st.session_state["answers"][current_index] = answer
+        if answer == question_data["answer"]:
+            st.session_state["feedback"][current_index] = "Correct"
+            st.session_state["score"] += 1
+        else:
+            st.session_state["feedback"][current_index] = "Incorrect"
+
+
+    if st.session_state["feedback"][current_index] == "Correct":
+        st.success("Correct !")
+    elif st.session_state["feedback"][current_index] == "Incorrect":
+        st.error("Incorrect !")
+
+
+    if current_index + 1 < 20:
         if st.button("Suivant"):
-            st.session_state["question_index"] += 2
+            st.session_state["question_index"] += 1
             st.experimental_rerun()
     else:
+
         if st.button("Terminer le QCM"):
-            if "final_score_calculated" not in st.session_state:
-                st.session_state["score"] = sum(
-                    1 for i, question_data in enumerate(st.session_state["selected_questions"])
-                    if st.session_state["answers"][i] == question_data["answer"]
-                )
-                st.session_state["final_score_calculated"] = True
-                st.session_state["quiz_completed"] = True
+            st.session_state["quiz_completed"] = True
             st.experimental_rerun()
