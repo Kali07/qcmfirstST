@@ -23,7 +23,7 @@ def qcm_bible():
                     st.session_state["quiz_completed"] = False
                     st.session_state["selected_questions"] = random.sample(questions, 20)
                     st.session_state["feedback"] = [None] * 20
-                    st.experimental_rerun()
+                    st.rerun()
                 else:
                     st.session_state["new_user"] = True
             else:
@@ -45,7 +45,7 @@ def qcm_bible():
                 st.session_state["selected_questions"] = random.sample(questions, 20)
                 st.session_state["feedback"] = [None] * 20
                 st.session_state["new_user"] = False
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.warning("Veuillez entrer un pseudo.")
 
@@ -59,7 +59,7 @@ def qcm_bible():
         
         if st.button("Recommencer ?"):
             reset_quiz()
-            st.experimental_rerun()
+            st.rerun()
 
     else:
         st.title("QCM sur la Bible")
@@ -96,11 +96,11 @@ def qcm_bible():
         if current_index + 1 < 20:
             if st.button("Suivant"):
                 st.session_state["question_index"] += 1
-                st.experimental_rerun()
+                st.rerun()
         else:
             if st.button("Terminer le QCM"):
                 st.session_state["quiz_completed"] = True
-                st.experimental_rerun()
+                st.rerun()
 def qcm_chemin():
     st.title("Cette partie arrive bientôt")
     st.markdown("*Streamlit* is **really** ***cool***.")
