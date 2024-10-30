@@ -37,7 +37,6 @@ elif page == "Scores Bible":
     
     # Afficher le DataFrame sous forme de tableau
     st.table(df_scores)
-    
     # if st.button("Nettoyer la base de données"):
     # # Fonction pour supprimer les données
     #     conn = get_connection()
