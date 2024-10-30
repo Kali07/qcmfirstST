@@ -53,10 +53,10 @@ def qcm_bible():
         st.title("Résultats du QCM Bible")
         save_score(st.session_state["user_email"], st.session_state["score"])
 
-        # Affiche le score final en gras
+        
         st.markdown(f"**Votre score final est : {st.session_state['score']} / 20**")
 
-        # Bouton pour rediriger vers la page des scores
+        
         if st.button("Recommencer ?"):
             reset_quiz()
             st.experimental_rerun()
@@ -67,7 +67,7 @@ def qcm_bible():
         question_data = st.session_state["selected_questions"][current_index]
         answer_selected = st.session_state["answers"][current_index] is not None
 
-        # Calcul et affichage de la barre de progression
+       
         progress = (current_index + 1) / 20
         st.progress(progress)
 
