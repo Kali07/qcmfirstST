@@ -103,4 +103,8 @@ def qcm_bible():
                 st.experimental_rerun()
 def qcm_chemin():
     st.title("Cette partie arrive bientôt")
+    st.markdown("*Streamlit* is **really** ***cool***.")
+    st.markdown('''
+        :red[Streamlit] :orange[can] :green[write] :blue[text] :violet[in]
+        :gray[pretty] :rainbow[colors] and :blue-background[highlight] text.''')
    
