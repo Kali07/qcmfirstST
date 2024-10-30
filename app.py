@@ -28,6 +28,7 @@ elif page == "QCM Chemin":
 
 elif page == "Scores Bible":
     st.title("Scores Bible")
+    st.balloons()
     top_scores = get_top_scores()    
     
     st.subheader("Classement des meilleurs scores")
@@ -54,4 +55,5 @@ elif page == "Scores Bible":
         
 elif page == "Scores Chemin":
     st.title("Scores Chemin ")
+    st.snow()
     #get_top_scores()
